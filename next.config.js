@@ -50,18 +50,13 @@
 
 // export default nextConfig
 
+const path = require("path");
 
-import path from "path";
-
-let userConfig = undefined;
+let userConfig = {};
 try {
-  userConfig = await import('./v0-user-next.config.mjs');
+  userConfig = require("./v0-user-next.config.js");
 } catch (e) {
-  try {
-    userConfig = await import("./v0-user-next.config");
-  } catch (innerError) {
-    // ignore error
-  }
+  // fallback failed or not found
 }
 
 /** @type {import('next').NextConfig} */
@@ -86,21 +81,21 @@ const nextConfig = {
   },
 };
 
+// Merge user config if exists
 if (userConfig) {
-  const config = userConfig.default || userConfig;
-  for (const key in config) {
+  for (const key in userConfig) {
     if (
       typeof nextConfig[key] === "object" &&
       !Array.isArray(nextConfig[key])
     ) {
       nextConfig[key] = {
         ...nextConfig[key],
-        ...config[key],
+        ...userConfig[key],
       };
     } else {
-      nextConfig[key] = config[key];
+      nextConfig[key] = userConfig[key];
     }
   }
 }
 
-export default nextConfig;
+module.exports = nextConfig;
