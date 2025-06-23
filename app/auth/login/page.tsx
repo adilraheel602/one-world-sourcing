@@ -1,16 +1,11 @@
-"use client"
+"use client";
 
-import { LoginForm } from "@/components/auth/login-form"
-import { useEffect } from "react";
-
-
+import { LoginForm } from "@/components/auth/login-form";
 
 export default function LoginPage() {
-
   return (
     <div>
       <LoginForm />
     </div>
   );
 }
-
