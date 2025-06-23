@@ -21,7 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-
+  
 export default function AboutUs() {
   return (
     <div className="min-h-screen bg-[#f8f8f8]">
