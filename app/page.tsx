@@ -752,6 +752,8 @@ export default function Home() {
             </Button>
           </Link>
           <div className="w-px h-4 bg-gray-600"></div>
+          <div className="bg-red-500 text-white p-4">Tailwind Working</div>
+
           <Link href="/supply/login">
             <Button
               variant="ghost"
