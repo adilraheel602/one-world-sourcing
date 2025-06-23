@@ -356,6 +356,11 @@
 //   )
 // }
 
+
+"use client";
+
+import { useEffect, useState } from "react";
+
 type Notification = {
   id: string;
   type: string;
@@ -367,45 +372,49 @@ type Notification = {
   link: string;
 };
 
-const [notifications, setNotifications] = useState<Notification[]>([]);
-
-
-import { useEffect, useState } from "react";
 const getAccessToken = () => localStorage.getItem("accessToken");
 
+export default function NotificationFetcher() {
+  const [notifications, setNotifications] = useState<Notification[] | null>(null);
 
-useEffect(() => {
-  const fetchNotifications = async () => {
-    const token = getAccessToken(); // Replace with your token logic
-    if (!notifications) {
-  return <div>Loading...</div>;
-}
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      const token = getAccessToken();
+      try {
+        const res = await fetch("http://localhost:8000/notifications/my/", {
+          headers: {
+            Authorization: `JWT ${token}`,
+          },
+        });
+        const data = await res.json();
+        setNotifications(data);
+      } catch (err) {
+        console.error("Error fetching notifications:", err);
+      }
+    };
 
-    try {
-      const res = await fetch("http://localhost:8000/notifications/my/", {
-        headers: {
-          Authorization: `JWT ${token}`,
-        },
-      });
-      const data = await res.json();
-      setNotifications(data);  // Replace mockNotifications with this
-    } catch (err) {
-      console.error("Error fetching notifications:", err);
-    }
+    fetchNotifications();
+  }, []);
+
+  const markAllAsRead = async () => {
+    const token = getAccessToken();
+    await fetch("http://localhost:8000/notifications/mark-read/", {
+      method: "POST",
+      headers: {
+        Authorization: `JWT ${token}`,
+      },
+    });
+    setNotifications((prev) => prev?.map((n) => ({ ...n, read: true })) ?? []);
   };
 
-  fetchNotifications();
-}, []);
+  if (notifications === null) {
+    return <div>Loading...</div>;
+  }
 
-
-
-const markAllAsRead = async () => {
-  const token = getAccessToken();
-  await fetch("http://localhost:8000/notifications/mark-read/", {
-    method: "POST",
-    headers: {
-      Authorization: `JWT ${token}`,
-    },
-  });
-  setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
-};
+  return (
+    <div>
+      {/* render notifications here */}
+      <button onClick={markAllAsRead}>Mark all as read</button>
+    </div>
+  );
+}
