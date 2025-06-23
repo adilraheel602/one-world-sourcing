@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import ClientProvider from "@/lib/ClientProvider"; // ✅ adjust path if needed
 
+
 import Script from "next/script";
 
 export const metadata: Metadata = {
