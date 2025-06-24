@@ -47,9 +47,12 @@ export default function NewOrderForm() {
     const fetchSuppliers = async () => {
       const token = localStorage.getItem("accessToken");
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/suppliers/list/", {
-          headers: { Authorization: `JWT ${token}` },
-        });
+        const res = await fetch(
+          "https://web-production-3f682.up.railway.app/api/suppliers/list/",
+          {
+            headers: { Authorization: `JWT ${token}` },
+          }
+        );
         const data = await res.json();
         if (Array.isArray(data.results)) {
           setSuppliers(data.results);
@@ -70,9 +73,12 @@ export default function NewOrderForm() {
     const fetchQuote = async () => {
       if (!quoteId) return;
       const token = localStorage.getItem("accessToken");
-      const res = await fetch(`http://127.0.0.1:8000/quotes/${quoteId}/`, {
-        headers: { Authorization: `JWT ${token}` },
-      });
+      const res = await fetch(
+        `https://web-production-3f682.up.railway.app/quotes/${quoteId}/`,
+        {
+          headers: { Authorization: `JWT ${token}` },
+        }
+      );
 
       if (res.ok) {
         const data = await res.json();
@@ -90,7 +96,7 @@ export default function NewOrderForm() {
     if (!token || !quoteId) return false;
 
     const res = await fetch(
-      `http://127.0.0.1:8000/quotes/${quoteId}/shipping/`,
+      `https://web-production-3f682.up.railway.app/quotes/${quoteId}/shipping/`,
       {
         method: "POST",
         headers: {
@@ -127,20 +133,23 @@ export default function NewOrderForm() {
     const ok = await saveShippingToQuote();
     if (!ok) return;
 
-    const res = await fetch("http://127.0.0.1:8000/api/orders/new/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `JWT ${token}`,
-      },
-      body: JSON.stringify({
-        quote: quoteId,
-        notes,
-        product, // ✅ ADD THIS
-        quantity, // ✅ ADD THIS
-        supplier: supplierId,
-      }),
-    });
+    const res = await fetch(
+      "https://web-production-3f682.up.railway.app/api/orders/new/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `JWT ${token}`,
+        },
+        body: JSON.stringify({
+          quote: quoteId,
+          notes,
+          product, // ✅ ADD THIS
+          quantity, // ✅ ADD THIS
+          supplier: supplierId,
+        }),
+      }
+    );
 
     if (!res.ok) {
       const errText = await res.text();

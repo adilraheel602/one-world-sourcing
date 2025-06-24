@@ -1,5 +1,5 @@
 export async function fetchNotifications(token: string) {
-  const res = await fetch("http://localhost:8000/notifications/my/", {
+  const res = await fetch("https://web-production-3f682.up.railway.app/notifications/my/", {
     headers: {
       Authorization: `JWT ${token}`,
     },
@@ -8,7 +8,7 @@ export async function fetchNotifications(token: string) {
 }
 
 export async function markNotificationsRead(token: string) {
-  const res = await fetch("http://localhost:8000/notifications/mark-all-read/", {
+  const res = await fetch("https://web-production-3f682.up.railway.app/notifications/mark-all-read/", {
     method: "POST",
     headers: {
       Authorization: `JWT ${token}`,

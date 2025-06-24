@@ -29,19 +29,22 @@ export function SupplierOfferList() {
       try {
         setLoading(true);
         setError(null);
-        
+
         const token = localStorage.getItem("accessToken");
         if (!token) {
           setError("Please login to view offers");
           return;
         }
 
-        const res = await fetch("http://127.0.0.1:8000/api/suppliers/offers/", {
-          headers: {
-            Authorization: `JWT ${token}`, // ✅ Use JWT instead of Bearer
-            "Content-Type": "application/json",
-          },
-        });
+        const res = await fetch(
+          "https://web-production-3f682.up.railway.app/api/suppliers/offers/",
+          {
+            headers: {
+              Authorization: `JWT ${token}`, // ✅ Use JWT instead of Bearer
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         if (res.status === 401) {
           console.error("Authentication failed - redirecting to login");
@@ -52,7 +55,7 @@ export function SupplierOfferList() {
 
         if (res.ok) {
           const data = await res.json();
-          
+
           // ✅ Check if data is an array, if not, handle it properly
           if (Array.isArray(data)) {
             setOffers(data);
@@ -140,7 +143,9 @@ export function SupplierOfferList() {
                 <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
                   <div className="flex flex-col items-center">
                     <p className="text-lg font-medium mb-2">No offers yet</p>
-                    <p className="text-sm">Create your first offer to get started</p>
+                    <p className="text-sm">
+                      Create your first offer to get started
+                    </p>
                   </div>
                 </td>
               </tr>
@@ -161,16 +166,25 @@ export function SupplierOfferList() {
                     ${offer.price || "0.00"}
                   </td>
                   <td className="px-6 py-4">
-                    <Badge className={`${getStatusColor(offer.status || "pending")} border-0`}>
-                      {offer.status ? offer.status.charAt(0).toUpperCase() + offer.status.slice(1) : "Pending"}
+                    <Badge
+                      className={`${getStatusColor(
+                        offer.status || "pending"
+                      )} border-0`}
+                    >
+                      {offer.status
+                        ? offer.status.charAt(0).toUpperCase() +
+                          offer.status.slice(1)
+                        : "Pending"}
                     </Badge>
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-500">
-                    {offer.created_at ? new Date(offer.created_at).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    }) : "N/A"}
+                    {offer.created_at
+                      ? new Date(offer.created_at).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })
+                      : "N/A"}
                   </td>
                   <td className="px-6 py-4 text-sm text-right">
                     <div className="flex justify-end space-x-2">

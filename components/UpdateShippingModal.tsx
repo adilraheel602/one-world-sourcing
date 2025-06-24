@@ -19,7 +19,7 @@ export default function UpdateShippingModal({
   const handleUpdate = async () => {
     const token = localStorage.getItem("accessToken");
     const res = await fetch(
-      `http://127.0.0.1:8000/quotes/${quoteId}/shipping/update/`,
+      `https://web-production-3f682.up.railway.app/quotes/${quoteId}/shipping/update/`,
       {
         method: "PATCH",
         headers: {

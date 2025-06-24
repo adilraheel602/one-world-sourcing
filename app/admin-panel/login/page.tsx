@@ -18,12 +18,15 @@ export default function AdminLoginPage() {
     console.log("Attempting admin login with:", { email, password });
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/auth/admin-login/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-        credentials: "include",
-      });
+      const res = await fetch(
+        "https://web-production-3f682.up.railway.app/auth/admin-login/",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+          credentials: "include",
+        }
+      );
       console.log("Admin login response status:", res.status);
       const data = await res.json();
       console.log("Admin login response data:", data);
@@ -44,7 +47,9 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-md mx-auto p-8 bg-white rounded-lg shadow-lg border border-gray-200">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold">Admin Login</h1>
-          <p className="text-gray-600 mt-2">Sign in to access the admin panel</p>
+          <p className="text-gray-600 mt-2">
+            Sign in to access the admin panel
+          </p>
         </div>
         {error && (
           <div className="mb-4 p-3 rounded-md bg-red-50 border border-red-200 flex items-center space-x-2">
@@ -66,7 +71,9 @@ export default function AdminLoginPage() {
         )}
         <div className="space-y-4">
           <div className="space-y-2">
-            <label htmlFor="email" className="text-sm font-medium">Email</label>
+            <label htmlFor="email" className="text-sm font-medium">
+              Email
+            </label>
             <Input
               id="email"
               type="email"
@@ -78,7 +85,9 @@ export default function AdminLoginPage() {
             />
           </div>
           <div className="space-y-2">
-            <label htmlFor="password" className="text-sm font-medium">Password</label>
+            <label htmlFor="password" className="text-sm font-medium">
+              Password
+            </label>
             <Input
               id="password"
               type="password"

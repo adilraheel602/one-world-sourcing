@@ -22,9 +22,12 @@ export default function SupplierQuotesPage() {
     const token = localStorage.getItem("accessToken");
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/quotes/supplier/quotes/", {
-        headers: { Authorization: `JWT ${token}` },
-      });
+      const res = await fetch(
+        "https://web-production-3f682.up.railway.app/quotes/supplier/quotes/",
+        {
+          headers: { Authorization: `JWT ${token}` },
+        }
+      );
 
       if (!res.ok) {
         console.error("Failed to fetch supplier quotes");

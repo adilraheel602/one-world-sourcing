@@ -49,11 +49,14 @@ export function LoginForm() {
     setIsGoogleLoading(true);
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/auth/google/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: response.credential }),
-      });
+      const res = await fetch(
+        "https://web-production-3f682.up.railway.app/auth/google/",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token: response.credential }),
+        }
+      );
 
       const data = await res.json();
       if (res.ok) {
@@ -61,9 +64,12 @@ export function LoginForm() {
         if (data.refresh) localStorage.setItem("refreshToken", data.refresh);
 
         // Check user role
-        const userRes = await fetch("http://127.0.0.1:8000/auth/users/me/", {
-          headers: { Authorization: `JWT ${data.access}` },
-        });
+        const userRes = await fetch(
+          "https://web-production-3f682.up.railway.app/auth/users/me/",
+          {
+            headers: { Authorization: `JWT ${data.access}` },
+          }
+        );
         const userData = await userRes.json();
 
         if (userData.is_admin) {
@@ -87,7 +93,7 @@ export function LoginForm() {
 
     try {
       const res = await fetch(
-        "http://127.0.0.1:8000/auth/jwt/login-with-cookie/",
+        "https://web-production-3f682.up.railway.app/auth/jwt/login-with-cookie/",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -104,9 +110,12 @@ export function LoginForm() {
         localStorage.setItem("accessToken", data.access);
         if (data.refresh) localStorage.setItem("refreshToken", data.refresh);
 
-        const userRes = await fetch("http://127.0.0.1:8000/auth/users/me/", {
-          headers: { Authorization: `JWT ${data.access}` },
-        });
+        const userRes = await fetch(
+          "https://web-production-3f682.up.railway.app/auth/users/me/",
+          {
+            headers: { Authorization: `JWT ${data.access}` },
+          }
+        );
         const userData = await userRes.json();
 
         if (userData.is_admin) {
@@ -129,32 +138,36 @@ export function LoginForm() {
   };
 
   useEffect(() => {
-  if (typeof window !== "undefined" && window.google && !promptShownRef.current) {
-    window.google.accounts.id.initialize({
-      client_id: "930022934278-edbssqh41gribq8thpuk3ohh24gphs5q.apps.googleusercontent.com", // ✅ REPLACE with your actual client ID
-      callback: handleGoogleResponse,
-      ux_mode: "popup",
-      cancel_on_tap_outside: true,
-    });
+    if (
+      typeof window !== "undefined" &&
+      window.google &&
+      !promptShownRef.current
+    ) {
+      window.google.accounts.id.initialize({
+        client_id:
+          "930022934278-edbssqh41gribq8thpuk3ohh24gphs5q.apps.googleusercontent.com", // ✅ REPLACE with your actual client ID
+        callback: handleGoogleResponse,
+        ux_mode: "popup",
+        cancel_on_tap_outside: true,
+      });
 
-    window.google.accounts.id.renderButton(
-      document.getElementById("google-signin-btn"),
-      {
-        theme: "outline",
-        size: "large",
-        type: "standard",
-        width: 300,
-      }
-    );
+      window.google.accounts.id.renderButton(
+        document.getElementById("google-signin-btn"),
+        {
+          theme: "outline",
+          size: "large",
+          type: "standard",
+          width: 300,
+        }
+      );
 
-    window.google.accounts.id.prompt((notification: any) => {
-      console.log("One Tap result:", notification);
-    });
+      window.google.accounts.id.prompt((notification: any) => {
+        console.log("One Tap result:", notification);
+      });
 
-    promptShownRef.current = true;
-  }
-}, []);
-
+      promptShownRef.current = true;
+    }
+  }, []);
 
   if (isGoogleLoading) {
     return (

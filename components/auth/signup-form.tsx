@@ -31,56 +31,54 @@ export function SignupForm({ quoteData }: SignupFormProps) {
   const [error, setError] = useState("");
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
-
   // Extract email and temp_quote_id from query parameters or quoteData
   const [email, setEmail] = useState(quoteData?.email || "");
   const [tempQuoteId, setTempQuoteId] = useState("");
 
   useEffect(() => {
-  const cancelPendingPrompt = () => {
-    try {
-      window.google?.accounts?.id?.cancel();
-    } catch (err) {
-      console.warn("GSI cancel failed:", err);
-    }
-  };
-
-  if (
-    typeof window !== "undefined" &&
-    window.google &&
-    !gsiSignupInit.current
-  ) {
-    gsiSignupInit.current = true;
-
-    cancelPendingPrompt(); // ✅ force-cancel any pending prompt
-
-    window.google.accounts.id.initialize({
-  client_id: "930022934278-edbssqh41gribq8thpuk3ohh24gphs5q.apps.googleusercontent.com",
-  callback: handleGoogleSignup,
-  ux_mode: "popup",
-  auto_select: false,
-  cancel_on_tap_outside: true,
-  // This line is critical to disable FedCM behavior:
-  context: "signup", // <-- use context signup
-});
-
-
-    window.google.accounts.id.renderButton(
-      document.getElementById("google-signup-btn"),
-      {
-        theme: "outline",
-        size: "large",
-        type: "standard",
-        width: 300,
+    const cancelPendingPrompt = () => {
+      try {
+        window.google?.accounts?.id?.cancel();
+      } catch (err) {
+        console.warn("GSI cancel failed:", err);
       }
-    );
-  }
+    };
 
-  return () => {
-    cancelPendingPrompt(); // ✅ again on unmount
-  };
-}, []);
+    if (
+      typeof window !== "undefined" &&
+      window.google &&
+      !gsiSignupInit.current
+    ) {
+      gsiSignupInit.current = true;
 
+      cancelPendingPrompt(); // ✅ force-cancel any pending prompt
+
+      window.google.accounts.id.initialize({
+        client_id:
+          "930022934278-edbssqh41gribq8thpuk3ohh24gphs5q.apps.googleusercontent.com",
+        callback: handleGoogleSignup,
+        ux_mode: "popup",
+        auto_select: false,
+        cancel_on_tap_outside: true,
+        // This line is critical to disable FedCM behavior:
+        context: "signup", // <-- use context signup
+      });
+
+      window.google.accounts.id.renderButton(
+        document.getElementById("google-signup-btn"),
+        {
+          theme: "outline",
+          size: "large",
+          type: "standard",
+          width: 300,
+        }
+      );
+    }
+
+    return () => {
+      cancelPendingPrompt(); // ✅ again on unmount
+    };
+  }, []);
 
   const handleGoogleSignup = async (response: any) => {
     if (!response?.credential) {
@@ -89,13 +87,16 @@ export function SignupForm({ quoteData }: SignupFormProps) {
     }
     setIsGoogleLoading(true);
     try {
-      const res = await fetch("http://127.0.0.1:8000/auth/google/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token: response.credential }),
-      });
+      const res = await fetch(
+        "https://web-production-3f682.up.railway.app/auth/google/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ token: response.credential }),
+        }
+      );
 
       const data = await res.json();
 
@@ -110,9 +111,9 @@ export function SignupForm({ quoteData }: SignupFormProps) {
     } catch (err) {
       console.error("Google signup error:", err);
       alert("Something went wrong during Google signup.");
-    }finally {
-    setIsGoogleLoading(false); // Optional fallback
-  }
+    } finally {
+      setIsGoogleLoading(false); // Optional fallback
+    }
   };
 
   useEffect(() => {
@@ -145,20 +146,23 @@ export function SignupForm({ quoteData }: SignupFormProps) {
     try {
       console.log("Submitting signup with:", { email, password });
 
-      const res = await fetch("http://localhost:8000/auth/users/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          username: email.split("@")[0] || email, // Ensure username is unique
-          password,
-          re_password: password, // Add this if DJOSER requires password retype
-          first_name: quoteData?.name.split(" ")[0] || "",
-          last_name: quoteData?.name.split(" ").slice(1).join(" ") || "",
-          company: quoteData?.company || "",
-        }),
-        credentials: "include",
-      });
+      const res = await fetch(
+        "https://web-production-3f682.up.railway.app/auth/users/",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email,
+            username: email.split("@")[0] || email, // Ensure username is unique
+            password,
+            re_password: password, // Add this if DJOSER requires password retype
+            first_name: quoteData?.name.split(" ")[0] || "",
+            last_name: quoteData?.name.split(" ").slice(1).join(" ") || "",
+            company: quoteData?.company || "",
+          }),
+          credentials: "include",
+        }
+      );
 
       if (!res.ok) {
         let errorData: any;
@@ -183,12 +187,15 @@ export function SignupForm({ quoteData }: SignupFormProps) {
 
       console.log("Signup successful, proceeding to login...");
 
-      const loginRes = await fetch("http://localhost:8000/auth/jwt/create/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-        credentials: "include",
-      });
+      const loginRes = await fetch(
+        "https://web-production-3f682.up.railway.app/auth/jwt/create/",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+          credentials: "include",
+        }
+      );
 
       const loginData = await loginRes.json();
       if (!loginRes.ok) {
@@ -203,7 +210,7 @@ export function SignupForm({ quoteData }: SignupFormProps) {
       if (tempQuoteId) {
         console.log("Finalizing quote with temp_quote_id:", tempQuoteId);
         const finalizeResponse = await fetch(
-          "http://localhost:8000/quote/finalize/",
+          "https://web-production-3f682.up.railway.app/quote/finalize/",
           {
             method: "POST",
             headers: {
@@ -238,14 +245,15 @@ export function SignupForm({ quoteData }: SignupFormProps) {
     setIsLoading(false);
   };
   if (isGoogleLoading) {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
-      <div className="animate-spin rounded-full h-12 w-12 border-4 border-black border-t-transparent" />
-      <span className="ml-4 text-lg font-medium text-gray-700">Creating your account...</span>
-    </div>
-  );
-}
-
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-black border-t-transparent" />
+        <span className="ml-4 text-lg font-medium text-gray-700">
+          Creating your account...
+        </span>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-md mx-auto p-8 bg-white rounded-lg shadow-lg border border-gray-200">

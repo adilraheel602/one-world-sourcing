@@ -126,11 +126,14 @@ export function StatsCards() {
       const token =
         localStorage.getItem("adminAccessToken") ||
         localStorage.getItem("accessToken");
-      const res = await fetch("http://127.0.0.1:8000/api/dashboard/stats/", {
-        headers: {
-          Authorization: `JWT ${token}`,
-        },
-      });
+      const res = await fetch(
+        "https://web-production-3f682.up.railway.app/api/dashboard/stats/",
+        {
+          headers: {
+            Authorization: `JWT ${token}`,
+          },
+        }
+      );
       const data = await res.json();
       setStats(data);
     };

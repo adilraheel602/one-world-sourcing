@@ -45,12 +45,15 @@ export function RecentOrders() {
       }
 
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/orders/my/", {
-          headers: {
-            Authorization: `JWT ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
+        const res = await fetch(
+          "https://web-production-3f682.up.railway.app/api/orders/my/",
+          {
+            headers: {
+              Authorization: `JWT ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         const text = await res.text();
 

@@ -26,29 +26,31 @@ export default function SupplierDashboardPage() {
   }, []);
 
   const handleUpgradePlan = async (plan: string) => {
-  const token = localStorage.getItem("accessToken");
-  try {
-    const res = await fetch("http://127.0.0.1:8000/api/suppliers/checkout/", {
-      method: "POST",
-      headers: {
-        Authorization: `JWT ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ plan }), // bronze, silver, gold, platinum
-    });
+    const token = localStorage.getItem("accessToken");
+    try {
+      const res = await fetch(
+        "https://web-production-3f682.up.railway.app/api/suppliers/checkout/",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `JWT ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ plan }), // bronze, silver, gold, platinum
+        }
+      );
 
-    const data = await res.json();
-    if (res.ok && data.checkout_url) {
-      window.location.href = data.checkout_url; // redirect to Stripe
-    } else {
-      alert(data.error || "Upgrade failed");
+      const data = await res.json();
+      if (res.ok && data.checkout_url) {
+        window.location.href = data.checkout_url; // redirect to Stripe
+      } else {
+        alert(data.error || "Upgrade failed");
+      }
+    } catch (err) {
+      console.error("Checkout Error:", err);
+      alert("An error occurred while upgrading.");
     }
-  } catch (err) {
-    console.error("Checkout Error:", err);
-    alert("An error occurred while upgrading.");
-  }
-};
-
+  };
 
   const checkUserAndRegistration = async () => {
     try {
@@ -57,16 +59,17 @@ export default function SupplierDashboardPage() {
         window.location.href = "/suppliers/login";
         return;
       }
-      
 
       // Get user info
-      const userRes = await fetch("http://127.0.0.1:8000/auth/users/me/", {
-        headers: {
-          Authorization: `JWT ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-      
+      const userRes = await fetch(
+        "https://web-production-3f682.up.railway.app/auth/users/me/",
+        {
+          headers: {
+            Authorization: `JWT ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (userRes.status === 401) {
         localStorage.removeItem("accessToken");
@@ -82,7 +85,7 @@ export default function SupplierDashboardPage() {
 
       // Check if supplier is registered
       const supplierRes = await fetch(
-        "http://127.0.0.1:8000/api/suppliers/profile/",
+        "https://web-production-3f682.up.railway.app/api/suppliers/profile/",
         {
           headers: {
             Authorization: `JWT ${token}`,
@@ -90,7 +93,6 @@ export default function SupplierDashboardPage() {
           },
         }
       );
-      
 
       if (supplierRes.ok) {
         setIsRegistered(true);
@@ -98,11 +100,10 @@ export default function SupplierDashboardPage() {
         setIsRegistered(false);
       }
       if (supplierRes.ok) {
-  const supplierData = await supplierRes.json();
-  setSupplier(supplierData);
-  setIsRegistered(true);
-}
-
+        const supplierData = await supplierRes.json();
+        setSupplier(supplierData);
+        setIsRegistered(true);
+      }
     } catch (err) {
       console.error("Error:", err);
       setError("Failed to load data");
@@ -182,7 +183,9 @@ export default function SupplierDashboardPage() {
     <div className="p-6">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Supplier Dashboard</h1>
-        <p className="text-gray-600">Welcome back, {supplier?.name || "No company"}</p>
+        <p className="text-gray-600">
+          Welcome back, {supplier?.name || "No company"}
+        </p>
       </div>
 
       {/* Your existing dashboard content here */}
@@ -197,36 +200,34 @@ export default function SupplierDashboardPage() {
         </p>
       </div>
       {isRegistered && supplier && (
-  <div className="mt-6 bg-white border p-6 rounded-lg text-sm text-gray-700 text-left">
-    <h3 className="text-lg font-semibold mb-2">Membership Details</h3>
-    <p className="mb-1">
-      <strong>Current Plan:</strong>{" "}
-      <span className="capitalize">{supplier.package_plan}</span>
-    </p>
-    <p className="mb-4">
-      <strong>Supplier Tier:</strong>{" "}
-      <span className="capitalize">
-        {supplier.tier_level.replace("_", " ")}
-      </span>
-    </p>
+        <div className="mt-6 bg-white border p-6 rounded-lg text-sm text-gray-700 text-left">
+          <h3 className="text-lg font-semibold mb-2">Membership Details</h3>
+          <p className="mb-1">
+            <strong>Current Plan:</strong>{" "}
+            <span className="capitalize">{supplier.package_plan}</span>
+          </p>
+          <p className="mb-4">
+            <strong>Supplier Tier:</strong>{" "}
+            <span className="capitalize">
+              {supplier.tier_level.replace("_", " ")}
+            </span>
+          </p>
 
-    <div className="flex flex-wrap gap-3">
-      {["silver", "gold", "platinum"].map((plan) =>
-        plan !== supplier.package_plan ? (
-          <button
-            key={plan}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
-            onClick={() => handleUpgradePlan(plan)}
-          >
-            Upgrade to {plan.charAt(0).toUpperCase() + plan.slice(1)}
-          </button>
-        ) : null
+          <div className="flex flex-wrap gap-3">
+            {["silver", "gold", "platinum"].map((plan) =>
+              plan !== supplier.package_plan ? (
+                <button
+                  key={plan}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+                  onClick={() => handleUpgradePlan(plan)}
+                >
+                  Upgrade to {plan.charAt(0).toUpperCase() + plan.slice(1)}
+                </button>
+              ) : null
+            )}
+          </div>
+        </div>
       )}
-    </div>
-  </div>
-)}
-
-
     </div>
   );
 }

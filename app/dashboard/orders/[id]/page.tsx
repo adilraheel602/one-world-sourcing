@@ -42,17 +42,23 @@ async function getValidToken(): Promise<string | null> {
   let token = localStorage.getItem("accessToken");
   const refresh = localStorage.getItem("refreshToken");
 
-  const check = await fetch("http://127.0.0.1:8000/auth/users/me/", {
-    headers: {
-      Authorization: `JWT ${token}`,
-    },
-  });
+  const check = await fetch(
+    "https://web-production-3f682.up.railway.app/auth/users/me/",
+    {
+      headers: {
+        Authorization: `JWT ${token}`,
+      },
+    }
+  );
   if (check.status === 401 && refresh) {
-    const refreshRes = await fetch("http://127.0.0.1:8000/auth/jwt/refresh/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ refresh }),
-    });
+    const refreshRes = await fetch(
+      "https://web-production-3f682.up.railway.app/auth/jwt/refresh/",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ refresh }),
+      }
+    );
 
     if (refreshRes.ok) {
       const data = await refreshRes.json();
@@ -109,7 +115,7 @@ export default function OrderDetailPage({
     if (!token) return;
 
     const res = await fetch(
-      `http://127.0.0.1:8000/api/orders/${id}/messages/`,
+      `https://web-production-3f682.up.railway.app/api/orders/${id}/messages/`,
       {
         headers: { Authorization: `JWT ${token}` },
       }
@@ -135,9 +141,12 @@ export default function OrderDetailPage({
       const token = await getValidToken();
       if (!token) return;
 
-      const res = await fetch(`http://127.0.0.1:8000/orders/${id}/`, {
-        headers: { Authorization: `JWT ${token}` },
-      });
+      const res = await fetch(
+        `https://web-production-3f682.up.railway.app/orders/${id}/`,
+        {
+          headers: { Authorization: `JWT ${token}` },
+        }
+      );
 
       const text = await res.text();
 
@@ -157,33 +166,34 @@ export default function OrderDetailPage({
   }, [id]);
 
   const fetchEvents = async () => {
-  const token = await getValidToken();
-  if (!token) return;
+    const token = await getValidToken();
+    if (!token) return;
 
-  try {
-    const res = await fetch(`http://127.0.0.1:8000/api/orders/${id}/timeline/`, {
-      headers: {
-        Authorization: `JWT ${token}`,
-      },
-    });
+    try {
+      const res = await fetch(
+        `https://web-production-3f682.up.railway.app/api/orders/${id}/timeline/`,
+        {
+          headers: {
+            Authorization: `JWT ${token}`,
+          },
+        }
+      );
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (Array.isArray(data)) {
-      setEvents(data);
-    } else if (Array.isArray(data?.events)) {
-      setEvents(data.events);
-    } else {
-      console.error("Expected array but got:", data);
-      setEvents([]); // fallback to prevent crash
+      if (Array.isArray(data)) {
+        setEvents(data);
+      } else if (Array.isArray(data?.events)) {
+        setEvents(data.events);
+      } else {
+        console.error("Expected array but got:", data);
+        setEvents([]); // fallback to prevent crash
+      }
+    } catch (err) {
+      console.error("Fetch error:", err);
+      setEvents([]);
     }
-  } catch (err) {
-    console.error("Fetch error:", err);
-    setEvents([]);
-  }
-};
-
-
+  };
 
   if (!order) return <div className="p-6">Loading...</div>;
 
@@ -192,7 +202,7 @@ export default function OrderDetailPage({
     if (!token) return;
 
     const res = await fetch(
-      `http://127.0.0.1:8000/api/orders/${id}/messages/`,
+      `https://web-production-3f682.up.railway.app/api/orders/${id}/messages/`,
       {
         method: "POST",
         headers: {

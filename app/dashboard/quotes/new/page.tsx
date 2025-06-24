@@ -29,24 +29,27 @@ export default function CreateQuotePage() {
       return;
     }
 
-    const res = await fetch("http://127.0.0.1:8000/quotes/new/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `JWT ${token}`,
-      },
-      body: JSON.stringify({
-        product_name: product,
-        product_type: productType,
-        quantity,
-        region,
-        target_price: targetPrice,
-        quality,
-        specifications,
-        supplier: parseInt(supplierId),
-        category: category,
-      }),
-    });
+    const res = await fetch(
+      "https://web-production-3f682.up.railway.app/quotes/new/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `JWT ${token}`,
+        },
+        body: JSON.stringify({
+          product_name: product,
+          product_type: productType,
+          quantity,
+          region,
+          target_price: targetPrice,
+          quality,
+          specifications,
+          supplier: parseInt(supplierId),
+          category: category,
+        }),
+      }
+    );
 
     let result = null;
     try {

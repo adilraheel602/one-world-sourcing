@@ -46,12 +46,15 @@ export default function EditQuotePage() {
 
     const fetchQuote = async () => {
       try {
-        const res = await fetch(`http://localhost:8000/quotes/${id}/`, {
-          headers: {
-            Authorization: `JWT ${localToken}`,
-            Accept: "application/json",
-          },
-        });
+        const res = await fetch(
+          `https://web-production-3f682.up.railway.app/quotes/${id}/`,
+          {
+            headers: {
+              Authorization: `JWT ${localToken}`,
+              Accept: "application/json",
+            },
+          }
+        );
 
         if (!res.ok) throw new Error("Failed to fetch quote");
 
@@ -84,7 +87,9 @@ export default function EditQuotePage() {
   };
 
   const getCompletionPercentage = () => {
-    const filled = requiredFields.filter((key) => form[key as keyof typeof form].trim() !== "");
+    const filled = requiredFields.filter(
+      (key) => form[key as keyof typeof form].trim() !== ""
+    );
     return Math.round((filled.length / requiredFields.length) * 100);
   };
 
@@ -105,14 +110,17 @@ export default function EditQuotePage() {
     }
 
     try {
-      const res = await fetch(`http://localhost:8000/quotes/${id}/`, {
-        method: "PATCH",
-        headers: {
-          Authorization: `JWT ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
+      const res = await fetch(
+        `https://web-production-3f682.up.railway.app/quotes/${id}/`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `JWT ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(form),
+        }
+      );
 
       if (!res.ok) {
         const errorMsg = await res.text();
@@ -145,7 +153,9 @@ export default function EditQuotePage() {
             name: field,
             value,
             onChange: handleChange,
-            placeholder: field.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
+            placeholder: field
+              .replace(/_/g, " ")
+              .replace(/\b\w/g, (l) => l.toUpperCase()),
             required: true,
             className: classNames({
               "border-red-500": !value.trim(),
@@ -154,7 +164,11 @@ export default function EditQuotePage() {
           return isTextArea ? (
             <Textarea key={field} {...commonProps} />
           ) : (
-            <Input key={field} {...commonProps} type={field === "quantity" ? "number" : "text"} />
+            <Input
+              key={field}
+              {...commonProps}
+              type={field === "quantity" ? "number" : "text"}
+            />
           );
         })}
 

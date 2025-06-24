@@ -26,7 +26,7 @@ export default function SuppliersPage() {
       try {
         const token = localStorage.getItem("accessToken");
         const res = await fetch(
-          `http://localhost:8000/api/suppliers/match/${quoteId}/`,
+          `https://web-production-3f682.up.railway.app/api/suppliers/match/${quoteId}/`,
 
           {
             headers: {
@@ -44,8 +44,6 @@ export default function SuppliersPage() {
       } finally {
         setLoading(false);
       }
-      
-
     };
 
     fetchSuppliers();

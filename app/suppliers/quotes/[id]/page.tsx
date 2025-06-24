@@ -13,7 +13,6 @@ interface Quote {
 
 const [quote, setQuote] = useState<Quote | null>(null);
 
-
 interface SupplierQuote {
   id: string;
   product_name: string;
@@ -30,9 +29,12 @@ export default function SupplierQuotesPage() {
   useEffect(() => {
     const fetchQuotes = async () => {
       const token = localStorage.getItem("accessToken");
-      const res = await fetch("http://127.0.0.1:8000/quotes/supplier/quotes/", {
-        headers: { Authorization: `JWT ${token}` },
-      });
+      const res = await fetch(
+        "https://web-production-3f682.up.railway.app/quotes/supplier/quotes/",
+        {
+          headers: { Authorization: `JWT ${token}` },
+        }
+      );
 
       if (!res.ok) {
         console.error("Failed to fetch supplier quotes");
@@ -88,15 +90,13 @@ export default function SupplierQuotesPage() {
               {!quote.response ? (
                 <Button
                   onClick={() =>
-                    window.location.href = `/suppliers/quotes/${quote.id}`
+                    (window.location.href = `/suppliers/quotes/${quote.id}`)
                   }
                 >
                   Submit Offer
                 </Button>
               ) : (
-                <p className="text-green-600 font-medium">
-                  Offer Submitted ✅
-                </p>
+                <p className="text-green-600 font-medium">Offer Submitted ✅</p>
               )}
             </div>
           ))}

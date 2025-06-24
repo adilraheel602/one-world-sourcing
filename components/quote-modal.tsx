@@ -17,7 +17,6 @@ interface QuoteModalProps {
   onSubmit: (data: any) => void;
 }
 
-
 export function QuoteModal({ isOpen, onClose, onSubmit }: QuoteModalProps) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("product");
@@ -51,7 +50,6 @@ export function QuoteModal({ isOpen, onClose, onSubmit }: QuoteModalProps) {
     shipmentDetails: "",
   });
 
-
   if (!isOpen) return null;
 
   const handleChange = (
@@ -63,10 +61,9 @@ export function QuoteModal({ isOpen, onClose, onSubmit }: QuoteModalProps) {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-     const form = new FormData();
+    const form = new FormData();
 
     // Add form fields
     for (const key in formData) {
@@ -79,26 +76,33 @@ export function QuoteModal({ isOpen, onClose, onSubmit }: QuoteModalProps) {
     });
 
     try {
-      const response = await fetch("http://localhost:8000/quote/temp-save/", {
-        method: "POST",
-        body: form,
-      });
+      const response = await fetch(
+        "https://web-production-3f682.up.railway.app/quote/temp-save/",
+        {
+          method: "POST",
+          body: form,
+        }
+      );
 
       const result = await response.json();
       if (response.ok) {
-      localStorage.setItem("quoteData", JSON.stringify(formData));
-      localStorage.setItem("tempQuoteId", result.temp_quote_id);
-      alert("You need to create an account to finalize your quote.");
-      onClose();
-      router.push(`/auth/signup?email=${encodeURIComponent(formData.email)}&temp_quote_id=${result.temp_quote_id}`);
-    } else {
-      throw new Error(result.error || "Failed to save quote temporarily");
+        localStorage.setItem("quoteData", JSON.stringify(formData));
+        localStorage.setItem("tempQuoteId", result.temp_quote_id);
+        alert("You need to create an account to finalize your quote.");
+        onClose();
+        router.push(
+          `/auth/signup?email=${encodeURIComponent(
+            formData.email
+          )}&temp_quote_id=${result.temp_quote_id}`
+        );
+      } else {
+        throw new Error(result.error || "Failed to save quote temporarily");
+      }
+    } catch (error) {
+      console.error("Error submitting quote:", error);
+      alert("Something went wrong. Please try again.");
     }
-  } catch (error) {
-    console.error("Error submitting quote:", error);
-    alert("Something went wrong. Please try again.");
-  }
-};
+  };
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">

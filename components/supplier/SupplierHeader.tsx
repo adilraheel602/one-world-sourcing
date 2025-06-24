@@ -13,16 +13,19 @@ export default function SupplierHeader() {
     if (!token) return;
 
     // Fetch user
-    fetch("http://127.0.0.1:8000/auth/users/me/", {
+    fetch("https://web-production-3f682.up.railway.app/auth/users/me/", {
       headers: { Authorization: `JWT ${token}` },
     })
       .then((res) => res.json())
       .then((data) => setUser(data));
 
     // Fetch supplier
-    fetch("http://127.0.0.1:8000/api/suppliers/profile/", {
-      headers: { Authorization: `JWT ${token}` },
-    })
+    fetch(
+      "https://web-production-3f682.up.railway.app/api/suppliers/profile/",
+      {
+        headers: { Authorization: `JWT ${token}` },
+      }
+    )
       .then((res) => res.json())
       .then((data) => setSupplier(data));
   }, []);

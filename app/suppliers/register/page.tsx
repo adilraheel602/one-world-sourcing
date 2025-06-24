@@ -308,12 +308,12 @@ export default function SupplierRegistrationForm() {
 
       console.log(
         "Submitting to:",
-        "http://127.0.0.1:8000/api/suppliers/register/"
+        "https://web-production-3f682.up.railway.app/api/suppliers/register/"
       );
       console.log("Headers:", headers);
 
       const response = await fetch(
-        "http://127.0.0.1:8000/api/suppliers/register/",
+        "https://web-production-3f682.up.railway.app/api/suppliers/register/",
         {
           method: "POST",
           headers,

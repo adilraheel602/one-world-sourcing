@@ -17,7 +17,7 @@ const handleStripeCheckout = async (quoteId: string) => {
 
   try {
     const res = await fetch(
-      "http://127.0.0.1:8000/quotes/stripe/create-checkout-session/",
+      "https://web-production-3f682.up.railway.app/quotes/stripe/create-checkout-session/",
       {
         method: "POST",
         headers: {

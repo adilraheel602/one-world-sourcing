@@ -356,7 +356,6 @@
 //   )
 // }
 
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -375,17 +374,22 @@ type Notification = {
 const getAccessToken = () => localStorage.getItem("accessToken");
 
 export default function NotificationFetcher() {
-  const [notifications, setNotifications] = useState<Notification[] | null>(null);
+  const [notifications, setNotifications] = useState<Notification[] | null>(
+    null
+  );
 
   useEffect(() => {
     const fetchNotifications = async () => {
       const token = getAccessToken();
       try {
-        const res = await fetch("http://localhost:8000/notifications/my/", {
-          headers: {
-            Authorization: `JWT ${token}`,
-          },
-        });
+        const res = await fetch(
+          "https://web-production-3f682.up.railway.app/notifications/my/",
+          {
+            headers: {
+              Authorization: `JWT ${token}`,
+            },
+          }
+        );
         const data = await res.json();
         setNotifications(data);
       } catch (err) {
@@ -398,12 +402,15 @@ export default function NotificationFetcher() {
 
   const markAllAsRead = async () => {
     const token = getAccessToken();
-    await fetch("http://localhost:8000/notifications/mark-read/", {
-      method: "POST",
-      headers: {
-        Authorization: `JWT ${token}`,
-      },
-    });
+    await fetch(
+      "https://web-production-3f682.up.railway.app/notifications/mark-read/",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `JWT ${token}`,
+        },
+      }
+    );
     setNotifications((prev) => prev?.map((n) => ({ ...n, read: true })) ?? []);
   };
 

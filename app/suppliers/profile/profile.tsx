@@ -19,7 +19,7 @@ const SupplierProfile = () => {
     // Helper to decode JWT
     function parseJwt(token: string) {
       try {
-        return JSON.parse(atob(token.split('.')[1]));
+        return JSON.parse(atob(token.split(".")[1]));
       } catch (e) {
         console.error("Failed to parse JWT:", e);
         return null;
@@ -44,7 +44,7 @@ const SupplierProfile = () => {
     const fetchProfile = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8000/api/suppliers/${id}/`,
+          `https://web-production-3f682.up.railway.app/api/suppliers/${id}/`,
           {
             headers: { Authorization: `JWT ${token}` },
           }
@@ -62,13 +62,16 @@ const SupplierProfile = () => {
             email: "",
             phone: "",
             website: "",
-            address: ""
+            address: "",
           };
         }
 
         setProfile(res.data);
       } catch (error: any) {
-        console.error("❌ Error fetching supplier profile:", error.response?.data || error.message);
+        console.error(
+          "❌ Error fetching supplier profile:",
+          error.response?.data || error.message
+        );
         alert("Failed to load supplier profile.");
       }
     };
@@ -83,7 +86,7 @@ const SupplierProfile = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://localhost:8000/api/suppliers/suppliers/${profile.id}/`,
+        `https://web-production-3f682.up.railway.app/api/suppliers/suppliers/${profile.id}/`,
         profile,
         {
           headers: { Authorization: `JWT ${token}` },
@@ -91,7 +94,10 @@ const SupplierProfile = () => {
       );
       alert("Profile updated!");
     } catch (error: any) {
-      alert("Error updating profile: " + (error.response?.data?.detail || error.message));
+      alert(
+        "Error updating profile: " +
+          (error.response?.data?.detail || error.message)
+      );
     }
   };
 
@@ -101,7 +107,14 @@ const SupplierProfile = () => {
     const { name, value } = e.target;
 
     if (
-      ["contact_name", "position", "email", "phone", "website", "address"].includes(name)
+      [
+        "contact_name",
+        "position",
+        "email",
+        "phone",
+        "website",
+        "address",
+      ].includes(name)
     ) {
       setProfile({
         ...profile!,
@@ -149,25 +162,142 @@ const SupplierProfile = () => {
           onSubmit={handleUpdate}
           className="bg-white p-4 rounded-lg border space-y-4"
         >
-          <input type="text" name="name" placeholder="Company Name" value={profile.name} onChange={handleChange} className="w-full p-2 border rounded-md" required />
-          <input type="text" name="location" placeholder="Location" value={profile.location} onChange={handleChange} className="w-full p-2 border rounded-md" required />
-          <input type="text" name="category" placeholder="Category" value={profile.category || ""} onChange={handleChange} className="w-full p-2 border rounded-md" />
-          <input type="text" name="country" placeholder="Country" value={profile.country} onChange={handleChange} className="w-full p-2 border rounded-md" required />
-          <input type="number" name="established_year" placeholder="Established Year" value={profile.established_year} onChange={handleChange} className="w-full p-2 border rounded-md" required />
-          <input type="text" name="employees" placeholder="Employees" value={profile.employees} onChange={handleChange} className="w-full p-2 border rounded-md" required />
-          <textarea name="description" placeholder="Description" value={profile.description} onChange={handleChange} className="w-full p-2 border rounded-md" required />
-          <input type="text" name="min_order_value" placeholder="Min Order Value" value={profile.min_order_value} onChange={handleChange} className="w-full p-2 border rounded-md" required />
-          <input type="text" name="production_capacity" placeholder="Production Capacity" value={profile.production_capacity} onChange={handleChange} className="w-full p-2 border rounded-md" required />
+          <input
+            type="text"
+            name="name"
+            placeholder="Company Name"
+            value={profile.name}
+            onChange={handleChange}
+            className="w-full p-2 border rounded-md"
+            required
+          />
+          <input
+            type="text"
+            name="location"
+            placeholder="Location"
+            value={profile.location}
+            onChange={handleChange}
+            className="w-full p-2 border rounded-md"
+            required
+          />
+          <input
+            type="text"
+            name="category"
+            placeholder="Category"
+            value={profile.category || ""}
+            onChange={handleChange}
+            className="w-full p-2 border rounded-md"
+          />
+          <input
+            type="text"
+            name="country"
+            placeholder="Country"
+            value={profile.country}
+            onChange={handleChange}
+            className="w-full p-2 border rounded-md"
+            required
+          />
+          <input
+            type="number"
+            name="established_year"
+            placeholder="Established Year"
+            value={profile.established_year}
+            onChange={handleChange}
+            className="w-full p-2 border rounded-md"
+            required
+          />
+          <input
+            type="text"
+            name="employees"
+            placeholder="Employees"
+            value={profile.employees}
+            onChange={handleChange}
+            className="w-full p-2 border rounded-md"
+            required
+          />
+          <textarea
+            name="description"
+            placeholder="Description"
+            value={profile.description}
+            onChange={handleChange}
+            className="w-full p-2 border rounded-md"
+            required
+          />
+          <input
+            type="text"
+            name="min_order_value"
+            placeholder="Min Order Value"
+            value={profile.min_order_value}
+            onChange={handleChange}
+            className="w-full p-2 border rounded-md"
+            required
+          />
+          <input
+            type="text"
+            name="production_capacity"
+            placeholder="Production Capacity"
+            value={profile.production_capacity}
+            onChange={handleChange}
+            className="w-full p-2 border rounded-md"
+            required
+          />
 
           {/* Contact Details */}
-          <input type="text" name="contact_name" placeholder="Contact Name" value={profile.contact?.name || ""} onChange={handleChange} className="w-full p-2 border rounded-md" required />
-          <input type="text" name="position" placeholder="Position" value={profile.contact?.position || ""} onChange={handleChange} className="w-full p-2 border rounded-md" required />
-          <input type="email" name="email" placeholder="Email" value={profile.contact?.email || ""} onChange={handleChange} className="w-full p-2 border rounded-md" required />
-          <input type="text" name="phone" placeholder="Phone" value={profile.contact?.phone || ""} onChange={handleChange} className="w-full p-2 border rounded-md" required />
-          <input type="url" name="website" placeholder="Website" value={profile.contact?.website || ""} onChange={handleChange} className="w-full p-2 border rounded-md" />
-          <textarea name="address" placeholder="Address" value={profile.contact?.address || ""} onChange={handleChange} className="w-full p-2 border rounded-md" />
+          <input
+            type="text"
+            name="contact_name"
+            placeholder="Contact Name"
+            value={profile.contact?.name || ""}
+            onChange={handleChange}
+            className="w-full p-2 border rounded-md"
+            required
+          />
+          <input
+            type="text"
+            name="position"
+            placeholder="Position"
+            value={profile.contact?.position || ""}
+            onChange={handleChange}
+            className="w-full p-2 border rounded-md"
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={profile.contact?.email || ""}
+            onChange={handleChange}
+            className="w-full p-2 border rounded-md"
+            required
+          />
+          <input
+            type="text"
+            name="phone"
+            placeholder="Phone"
+            value={profile.contact?.phone || ""}
+            onChange={handleChange}
+            className="w-full p-2 border rounded-md"
+            required
+          />
+          <input
+            type="url"
+            name="website"
+            placeholder="Website"
+            value={profile.contact?.website || ""}
+            onChange={handleChange}
+            className="w-full p-2 border rounded-md"
+          />
+          <textarea
+            name="address"
+            placeholder="Address"
+            value={profile.contact?.address || ""}
+            onChange={handleChange}
+            className="w-full p-2 border rounded-md"
+          />
 
-          <Button type="submit" className="w-full bg-black text-white">Update Profile</Button>
+          <Button type="submit" className="w-full bg-black text-white">
+            Update Profile
+          </Button>
         </form>
       </div>
     </div>

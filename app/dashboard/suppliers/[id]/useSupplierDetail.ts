@@ -6,7 +6,7 @@ export function useSupplierDetail(id: string) {
 
   useEffect(() => {
     if (!id) return;
-    fetch(`http://127.0.0.1:8000/api/suppliers/${id}/`)
+    fetch(`https://web-production-3f682.up.railway.app/api/suppliers/${id}/`)
       .then((res) => res.json())
       .then((data) => setSupplier(data))
       .catch((err) => console.error("Supplier detail fetch error:", err))

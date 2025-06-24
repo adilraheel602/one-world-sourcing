@@ -28,7 +28,7 @@ export default function QuoteChatSection({ quoteId }: QuoteChatSectionProps) {
     const fetchMessages = async () => {
       try {
         const res = await fetch(
-          `http://localhost:8000/quotes/${quoteId}/messages/`,
+          `https://web-production-3f682.up.railway.app/quotes/${quoteId}/messages/`,
           {
             headers: {
               Authorization: `JWT ${accessToken}`,
@@ -55,7 +55,7 @@ export default function QuoteChatSection({ quoteId }: QuoteChatSectionProps) {
 
     try {
       const res = await fetch(
-        `http://localhost:8000/quotes/${quoteId}/messages/`,
+        `https://web-production-3f682.up.railway.app/quotes/${quoteId}/messages/`,
         {
           method: "POST",
           headers: {

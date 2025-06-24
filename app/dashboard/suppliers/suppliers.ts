@@ -21,7 +21,7 @@ export function useSuppliers() {
           throw new Error('No access token found. Please login.');
         }
 
-        const response = await fetch("http://127.0.0.1:8000/api/suppliers/list", {
+        const response = await fetch("https://web-production-3f682.up.railway.app/api/suppliers/list", {
           headers: {
             Accept: "application/json",
             // Note: Your Django config uses 'JWT' not 'Bearer'
@@ -73,7 +73,7 @@ async function refreshToken(): Promise<boolean> {
     const refreshToken = localStorage.getItem('refresh_token');
     if (!refreshToken) return false;
 
-    const response = await fetch('http://127.0.0.1:8000/api/token/refresh/', {
+    const response = await fetch('https://web-production-3f682.up.railway.app/api/token/refresh/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

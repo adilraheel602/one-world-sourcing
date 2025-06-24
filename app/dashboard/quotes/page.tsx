@@ -111,14 +111,17 @@ export default function QuotesPage() {
     uploadedFiles.forEach((file) => data.append("attachments", file));
 
     try {
-      const res = await fetch("http://localhost:8000/quotes/create/", {
-        method: "POST",
-        headers: {
-          Authorization: `JWT ${token}`,
-          Accept: "application/json",
-        },
-        body: data,
-      });
+      const res = await fetch(
+        "https://web-production-3f682.up.railway.app/quotes/create/",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `JWT ${token}`,
+            Accept: "application/json",
+          },
+          body: data,
+        }
+      );
 
       let resultText = await res.text(); // always succeed
       let result;

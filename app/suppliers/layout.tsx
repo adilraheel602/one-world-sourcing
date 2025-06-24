@@ -29,7 +29,8 @@ const mockNotifications = [
     id: "notif-1",
     type: "quote",
     title: "New Quote Request",
-    message: "A new quote request has been assigned to you for Cotton T-Shirts.",
+    message:
+      "A new quote request has been assigned to you for Cotton T-Shirts.",
     time: "10:32 AM",
     read: false,
   },
@@ -42,8 +43,6 @@ const mockNotifications = [
     read: false,
   },
 ];
-
-
 
 const getNotificationIcon = (type: string) => {
   switch (type) {
@@ -81,12 +80,15 @@ export default function SupplierLayout({ children }: SupplierLayoutProps) {
         return;
       }
 
-      const res = await fetch("http://127.0.0.1:8000/auth/users/me/", {
-        headers: {
-          Authorization: `JWT ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await fetch(
+        "https://web-production-3f682.up.railway.app/auth/users/me/",
+        {
+          headers: {
+            Authorization: `JWT ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (res.status === 401) {
         localStorage.removeItem("accessToken");
@@ -271,7 +273,9 @@ export default function SupplierLayout({ children }: SupplierLayoutProps) {
                                       variant="ghost"
                                       size="sm"
                                       className="ml-1 h-6 w-6 p-0"
-                                      onClick={() => markAsRead(notification.id)}
+                                      onClick={() =>
+                                        markAsRead(notification.id)
+                                      }
                                     >
                                       <Check className="h-3 w-3" />
                                     </Button>

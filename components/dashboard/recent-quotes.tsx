@@ -43,12 +43,15 @@ export function RecentQuotes() {
         return;
       }
 
-      const res = await fetch("http://127.0.0.1:8000/quotes/my/", {
-        headers: {
-          Authorization: `JWT ${token}`, // Changed from Bearer to JWT
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await fetch(
+        "https://web-production-3f682.up.railway.app/quotes/my/",
+        {
+          headers: {
+            Authorization: `JWT ${token}`, // Changed from Bearer to JWT
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (res.status === 401) {
         // Token expired or invalid

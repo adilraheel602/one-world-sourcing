@@ -49,7 +49,9 @@ const mockNotifications = [
   },
   // ... other notifications
 ];
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "http://127.0.0.1:8000";
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_BASE ||
+  "https://web-production-3f682.up.railway.app";
 
 const getAccessToken = () => localStorage.getItem("accessToken");
 
@@ -69,7 +71,9 @@ export function DashboardHeader({ isAdmin }: DashboardHeaderProps) {
   } | null>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem(isAdmin ? "adminAccessToken" : "accessToken");
+    const token = localStorage.getItem(
+      isAdmin ? "adminAccessToken" : "accessToken"
+    );
     if (!token) {
       router.push(isAdmin ? "/admin-panel/login" : "/auth/login");
       return;
@@ -194,12 +198,15 @@ export function DashboardHeader({ isAdmin }: DashboardHeaderProps) {
 
   const markAllAsRead = async () => {
     const token = getAccessToken();
-    await fetch("http://localhost:8000/notifications/mark-read/", {
-      method: "POST",
-      headers: {
-        Authorization: `JWT ${token}`,
-      },
-    });
+    await fetch(
+      "https://web-production-3f682.up.railway.app/notifications/mark-read/",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `JWT ${token}`,
+        },
+      }
+    );
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
   };
 

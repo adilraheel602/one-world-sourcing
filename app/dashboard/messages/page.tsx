@@ -44,7 +44,7 @@ export default function MessagesPage() {
     const token = localStorage.getItem("accessToken");
     if (token) {
       axios
-        .get("http://127.0.0.1:8000/auth/users/me/", {
+        .get("https://web-production-3f682.up.railway.app/auth/users/me/", {
           headers: { Authorization: `JWT ${token}` },
         })
         .then((res) => {
@@ -59,11 +59,14 @@ export default function MessagesPage() {
 
     if (storedToken) {
       axios
-        .get("http://127.0.0.1:8000/api/messages/inbox/", {
-          headers: {
-            Authorization: `JWT ${storedToken}`,
-          },
-        })
+        .get(
+          "https://web-production-3f682.up.railway.app/api/messages/inbox/",
+          {
+            headers: {
+              Authorization: `JWT ${storedToken}`,
+            },
+          }
+        )
         .then((res) => {
           setConversations(res.data);
           if (res.data.length > 0) {
@@ -78,12 +81,15 @@ export default function MessagesPage() {
   const fetchMessages = (conversationId: number, token: string | null) => {
     if (!token) return;
     axios
-      .get(`http://127.0.0.1:8000/api/messages/${conversationId}/`, {
-        headers: {
-          Authorization: `JWT ${token}`,
-        },
-      })
-      
+      .get(
+        `https://web-production-3f682.up.railway.app/api/messages/${conversationId}/`,
+        {
+          headers: {
+            Authorization: `JWT ${token}`,
+          },
+        }
+      )
+
       .then((res) => {
         setActiveConversation((prev: any) => ({ ...prev, messages: res.data }));
       })
@@ -103,20 +109,19 @@ export default function MessagesPage() {
 
     try {
       const response = await fetch(
-  `http://127.0.0.1:8000/api/messages/send/`, // ✅ Use your Django send_message view
-  {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `JWT ${token}`,
-    },
-    body: JSON.stringify({
-      conversation_id: activeConversation.id,
-      content: newMessage,
-    }),
-  }
-);
-
+        `https://web-production-3f682.up.railway.app/api/messages/send/`, // ✅ Use your Django send_message view
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `JWT ${token}`,
+          },
+          body: JSON.stringify({
+            conversation_id: activeConversation.id,
+            content: newMessage,
+          }),
+        }
+      );
 
       setNewMessage("");
       setAttachments([]); // if using attachments later

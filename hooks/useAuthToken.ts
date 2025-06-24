@@ -8,7 +8,7 @@ export default function useAuthToken() {
     if (!refresh) return null;
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/auth/jwt/refresh/", {
+      const res = await fetch("https://web-production-3f682.up.railway.app/auth/jwt/refresh/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ refresh }),
